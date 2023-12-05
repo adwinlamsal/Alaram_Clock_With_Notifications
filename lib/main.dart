@@ -1,13 +1,18 @@
 import 'dart:async';
 
-import 'package:alaram/Screen/Add_Alaram.dart';
+import 'package:alaram/Provider/Provier.dart';
+import 'package:alaram/Screen/Add_Alarm.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
-void main() => runApp(const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyApp(),
+void main() => runApp(ChangeNotifierProvider(
+      create: (contex) => alarmprovider(),
+      child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: MyApp(),
+      ),
     ));
 
 class MyApp extends StatefulWidget {
@@ -18,10 +23,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-bool value =false;
-
-
+  bool value = false;
 
   @override
   void initState() {
@@ -34,7 +36,7 @@ bool value =false;
 
   @override
   Widget build(BuildContext context) {
-    DateTime dateTime = DateTime.now();
+    
 
     return Scaffold(
       backgroundColor: Color(0xFFEEEFF5),
@@ -50,7 +52,7 @@ bool value =false;
           )
         ],
         title: const Text(
-          'Alaram Clock ',
+          'Alarm Clock ',
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
@@ -75,48 +77,55 @@ bool value =false;
                   color: Colors.white),
             )),
           ),
-          Container(
-            height: MediaQuery.of(context).size.height * 0.7,
-            child: ListView.builder(
-                itemCount: 1,
-                itemBuilder: (BuildContext, index) {
-                  return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        height: MediaQuery.of(context).size.height * 0.1,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                        ),
-                        child: Padding(
+          Consumer<alarmprovider>(
+            builder: (context,alarm,child) {
+              return Container(
+                height: MediaQuery.of(context).size.height * 0.7,
+                child: ListView.builder(
+                    itemCount: alarm.modelist.length,
+                    itemBuilder: (BuildContext, index) {
+                      return Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                          child: Container(
+                            height: MediaQuery.of(context).size.height * 0.1,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    "6.00 Am",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        DateFormat().add_jms().format(
+                                              alarm.modelist[index].dateTime,
+                                            ),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                            color: Colors.black),
+                                      ),
+                                      CupertinoSwitch(
+                                          value: alarm.modelist[index].check,
+                                          onChanged: (v) {
+                                       alarm.CheckAlarm(index, v);
+                                          }),
+                                    ],
                                   ),
-                                  CupertinoSwitch(
-                                      value: value, onChanged: (v) {
-value=v;
-
-                                      }),
+                                  Text("Daily")
                                 ],
                               ),
-                              Text("Daily")
-                            ],
-                          ),
-                        ),
-                      ));
-                }),
+                            ),
+                          ));
+                    }),
+              );
+            }
           ),
           Expanded(
             child: Container(
@@ -129,7 +138,7 @@ value=v;
                   child: GestureDetector(
                 onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AddAlaram()));
+                      MaterialPageRoute(builder: (context) => AddAlarm()));
                 },
                 child: Container(
                     decoration: BoxDecoration(
