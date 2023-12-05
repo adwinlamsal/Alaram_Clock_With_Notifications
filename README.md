@@ -1,6 +1,6 @@
-# alaram
+# Alaram Clock
 
-A new Flutter project.
+Project : Working in Progess.....
 
 ## Getting Started
 
