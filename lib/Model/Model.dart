@@ -1,13 +1,33 @@
-class model {
+import 'dart:convert';
 
+Model modelFromJson(String str) => Model.fromJson(json.decode(str));
 
-String ? label;
+String modelToJson(Model data) => json.encode(data.toJson());
 
-DateTime  dateTime;
+class Model {
+    String ? label;
+    String ? dateTime;
+    bool check;
+    String ? when;
 
-bool check;
+    Model({
+        required this.label,
+        required this.dateTime,
+        required this.check,
+        required this.when,
+    });
 
+    factory Model.fromJson(Map<String, dynamic> json) => Model(
+        label: json["label"],
+        dateTime: json["dateTime"],
+        check: json["check"],
+        when: json["when"],
+    );
 
-model(this.label,this.dateTime,this.check);
-
+    Map<String, dynamic> toJson() => {
+        "label": label,
+        "dateTime": dateTime,
+        "check": check,
+        "when": when,
+    };
 }

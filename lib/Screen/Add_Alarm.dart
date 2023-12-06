@@ -2,6 +2,7 @@ import 'package:alaram/Provider/Provier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class AddAlarm extends StatefulWidget {
   const AddAlarm({super.key});
@@ -13,11 +14,15 @@ class AddAlarm extends StatefulWidget {
 class _AddAlaramState extends State<AddAlarm> {
   late TextEditingController controller;
 
-  DateTime? dateTime;
+  String? dateTime;
+  bool repeat = false;
+
+  String? name = "none";
 
   @override
   void initState() {
     controller = TextEditingController();
+    context.read<alarmprovider>().GetData();
     super.initState();
   }
 
@@ -49,9 +54,11 @@ class _AddAlaramState extends State<AddAlarm> {
                 child: CupertinoDatePicker(
               showDayOfWeek: true,
               minimumDate: DateTime.now(),
-              dateOrder: DatePickerDateOrder.ydm,
+              dateOrder: DatePickerDateOrder.dmy,
               onDateTimeChanged: (va) {
-                dateTime = va;
+                dateTime = DateFormat().add_jms().format(va);
+
+                print(dateTime);
               },
             )),
           ),
@@ -64,12 +71,35 @@ class _AddAlaramState extends State<AddAlarm> {
                   controller: controller,
                 )),
           ),
-       
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(" Repeat daily"),
+              ),
+              CupertinoSwitch(
+                value: repeat,
+                onChanged: (bool value) {
+                  repeat = value;
+
+                  if (repeat == false) {
+                    name = "none";
+                  } else {
+                    name = "Everyday";
+                  }
+
+                  setState(() {});
+                },
+              ),
+            ],
+          ),
           ElevatedButton(
               onPressed: () {
                 context
                     .read<alarmprovider>()
-                    .SetAlaram(controller.text, dateTime!, false);
+                    .SetAlaram(controller.text, dateTime!, true, name!);
+
+                context.read<alarmprovider>().SetData();
 
                 Navigator.pop(context);
               },
