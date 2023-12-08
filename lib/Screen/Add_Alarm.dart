@@ -17,6 +17,8 @@ class _AddAlaramState extends State<AddAlarm> {
   String? dateTime;
   bool repeat = false;
 
+  DateTime ? notificationtime;
+
   String? name = "none";
 
   @override
@@ -58,6 +60,8 @@ class _AddAlaramState extends State<AddAlarm> {
               onDateTimeChanged: (va) {
                 dateTime = DateFormat().add_jms().format(va);
 
+                notificationtime=va;
+
                 print(dateTime);
               },
             )),
@@ -98,8 +102,12 @@ class _AddAlaramState extends State<AddAlarm> {
                 context
                     .read<alarmprovider>()
                     .SetAlaram(controller.text, dateTime!, true, name!);
-
                 context.read<alarmprovider>().SetData();
+
+
+               context.read<alarmprovider>().SecduleNotification(notificationtime!);
+
+
 
                 Navigator.pop(context);
               },
