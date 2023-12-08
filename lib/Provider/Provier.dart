@@ -21,9 +21,9 @@ FlutterLocalNotificationsPlugin? flutterLocalNotificationsPlugin;
 late BuildContext context;
 
 
-SetAlaram(String label,String dateTime,bool check,String repeat){
+SetAlaram(String label,String dateTime,bool check,String repeat,int id,int milliseconds){
 
-modelist.add(Model(label: label, dateTime: dateTime, check: check, when: repeat));
+modelist.add(Model(label: label, dateTime: dateTime, check: check, when: repeat,id: id,milliseconds: milliseconds));
 notifyListeners();
 
 
@@ -31,7 +31,7 @@ notifyListeners();
 
 
 
-CheckAlarm(int index,bool check){
+EditSwitch(int index,bool check){
 
 modelist[index].check=check;
 notifyListeners();
@@ -125,7 +125,7 @@ notifyListeners();
 
 
 
-  SecduleNotification(DateTime datetim) async {
+  SecduleNotification(DateTime datetim,int Randomnumber) async {
 
     int newtime= datetim.millisecondsSinceEpoch - DateTime.now().millisecondsSinceEpoch;
     print(datetim.millisecondsSinceEpoch);
@@ -133,7 +133,7 @@ notifyListeners();
     print(newtime);
 
     await flutterLocalNotificationsPlugin!.zonedSchedule(
-        0,
+        Randomnumber,
         'scheduled title',
         'scheduled body',
         tz.TZDateTime.now(tz.local).add( Duration(milliseconds: newtime)),
@@ -151,7 +151,12 @@ notifyListeners();
 
 
 
+CancelNotification(int notificationid)async{
 
+await flutterLocalNotificationsPlugin!.cancel(notificationid);
+
+
+}
 
 
 

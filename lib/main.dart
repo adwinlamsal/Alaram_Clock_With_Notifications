@@ -138,13 +138,24 @@ class _MyAppState extends State<MyApp> {
                                       ],
                                     ),
                                     CupertinoSwitch(
-                                        value: alarm.modelist[index].check,
+                                        value:(alarm.modelist[index].milliseconds! < DateTime.now().microsecondsSinceEpoch)?false: alarm.modelist[index].check,
                                         onChanged: (v) {
-                                          print(v);
 
-                                          alarm.CheckAlarm(index, v);
+                                        
 
-                                          print(alarm.modelist[index].check);
+
+
+
+
+                        
+
+                                          alarm.EditSwitch(index, v);
+
+
+
+
+                                          alarm.CancelNotification(alarm.modelist[index].id!);
+
                                         }),
                                   ],
                                 ),

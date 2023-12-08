@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:alaram/Provider/Provier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +19,10 @@ class _AddAlaramState extends State<AddAlarm> {
   String? dateTime;
   bool repeat = false;
 
-  DateTime ? notificationtime;
+  DateTime? notificationtime;
 
   String? name = "none";
+  int ? Milliseconds;
 
   @override
   void initState() {
@@ -60,7 +63,9 @@ class _AddAlaramState extends State<AddAlarm> {
               onDateTimeChanged: (va) {
                 dateTime = DateFormat().add_jms().format(va);
 
-                notificationtime=va;
+                Milliseconds = va.microsecondsSinceEpoch;
+
+                notificationtime = va;
 
                 print(dateTime);
               },
@@ -99,15 +104,16 @@ class _AddAlaramState extends State<AddAlarm> {
           ),
           ElevatedButton(
               onPressed: () {
-                context
-                    .read<alarmprovider>()
-                    .SetAlaram(controller.text, dateTime!, true, name!);
+                Random random = new Random();
+                int randomNumber = random.nextInt(100);
+
+                context.read<alarmprovider>().SetAlaram(
+                    controller.text, dateTime!, true, name!, randomNumber,Milliseconds!);
                 context.read<alarmprovider>().SetData();
 
-
-               context.read<alarmprovider>().SecduleNotification(notificationtime!);
-
-
+                context
+                    .read<alarmprovider>()
+                    .SecduleNotification(notificationtime!, randomNumber);
 
                 Navigator.pop(context);
               },
