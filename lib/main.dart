@@ -138,7 +138,7 @@ class _MyAppState extends State<MyApp> {
                                       ],
                                     ),
                                     CupertinoSwitch(
-                                        value:(alarm.modelist[index].milliseconds! < DateTime.now().microsecondsSinceEpoch)?false: alarm.modelist[index].check,
+                                        value:(alarm.modelist[index].milliseconds! < DateTime.now().microsecondsSinceEpoch)? false:alarm.modelist[index].check,
                                         onChanged: (v) {
 
                                         

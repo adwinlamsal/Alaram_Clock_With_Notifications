@@ -7,6 +7,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+
+import 'package:intl/intl.dart';
+
 import 'package:timezone/timezone.dart' as tz;
 class alarmprovider extends ChangeNotifier{
 
@@ -97,7 +101,7 @@ notifyListeners();
     }
     await Navigator.push(
       context,
-      MaterialPageRoute<void>(builder: (context) => AddAlarm())
+      MaterialPageRoute<void>(builder: (context) => MyApp())
     );
   }
 
@@ -131,18 +135,25 @@ notifyListeners();
     print(datetim.millisecondsSinceEpoch);
     print(DateTime.now().millisecondsSinceEpoch);
     print(newtime);
-
     await flutterLocalNotificationsPlugin!.zonedSchedule(
         Randomnumber,
-        'scheduled title',
-        'scheduled body',
+        'Alarm Clock',
+        "${DateFormat().format(DateTime.now())}",
         tz.TZDateTime.now(tz.local).add( Duration(milliseconds: newtime)),
 
 
         const NotificationDetails(
             android: AndroidNotificationDetails(
                 'your channel id', 'your channel name',
-                channelDescription: 'your channel description')),
+                channelDescription: 'your channel description',
+                
+                sound: RawResourceAndroidNotificationSound("alarm"),
+                autoCancel: false,
+                playSound: true,
+                priority: Priority.max
+                
+                
+                )),
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime);
