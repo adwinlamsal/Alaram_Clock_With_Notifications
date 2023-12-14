@@ -1,6 +1,10 @@
 # Alaram Clock
 
-Project : Working in Progess.....
+- Alarm Notification.
+- Date Time Picker
+- Shared Preferences.
+
+
 
 ## Getting Started
 
